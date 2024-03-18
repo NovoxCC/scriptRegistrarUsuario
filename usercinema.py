@@ -3,7 +3,7 @@ from argon2 import PasswordHasher
 import secrets
 
 # Función para agregar un usuario a la base de datos
-def agregar_usuario(username, password):
+def agregar_usuario(username, password, role_id):
     # Configuración de la conexión a la base de datos
     config = {
         'user': 'root',
@@ -29,10 +29,10 @@ def agregar_usuario(username, password):
 
     try:
         # Crear la consulta de inserción para el usuario
-        consulta = "INSERT INTO Users (username, password_hash, salt) VALUES (%s, %s, %s)"
+        consulta = "INSERT INTO Users (username, password_hash, salt, role_id) VALUES (%s, %s, %s, %s)"
         
         # Ejecutar la consulta
-        cursor.execute(consulta, (username, password_hash, salt))
+        cursor.execute(consulta, (username, password_hash, salt, role_id))
 
         # Confirmar la transacción
         conn.commit()
@@ -49,6 +49,7 @@ if __name__ == "__main__":
     # Datos de usuario
     username = input("Ingrese el nombre de usuario: ")
     password = input("Ingrese la contraseña: ")
+    role_id = int(input("Ingrese el ID del rol (1 para Regular User, 2 para Admin User): "))
 
     # Llamar a la función para agregar usuario
-    agregar_usuario(username, password)
+    agregar_usuario(username, password, role_id)
